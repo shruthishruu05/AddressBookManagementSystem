@@ -14,7 +14,8 @@ import org.junit.Test;
 
 import com.google.gson.Gson;
 
-public class AddressBookTest {
+public class AddressBookTest 
+{
 	PersonDetails person1;
 	PersonDetails person2;
 	@Before
