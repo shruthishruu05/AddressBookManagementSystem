@@ -14,7 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.*;
 
-public class OpenCSVServiceProvider  {
+public class OpenCSVServiceProvider  
+{
 	List<PersonDetails> myUsers = new ArrayList<>();
 	public void writeData(PersonDetails person, String path)  {
 		List<PersonDetails> contactList = new ArrayList<>();
