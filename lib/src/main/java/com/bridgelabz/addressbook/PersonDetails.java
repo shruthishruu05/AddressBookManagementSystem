@@ -3,7 +3,8 @@ package com.bridgelabz.addressbook;
 
 import com.opencsv.bean.CsvBindByName;
 
-public class PersonDetails {
+public class PersonDetails 
+{
 	@CsvBindByName
     private String firstName;
 	@CsvBindByName
