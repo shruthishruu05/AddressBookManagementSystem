@@ -19,7 +19,8 @@ public class DBDemo
 			Class.forName("com.mysql.jdbc.Driver");
 			System.out.println("Driver loaded!");
 		}
-			catch(ClassNotFoundException e) {
+			catch(ClassNotFoundException e) 
+		{
 				throw new IllegalStateException("Cannot find the driver in the classpath",e);
 		}
 		listDrivers();
