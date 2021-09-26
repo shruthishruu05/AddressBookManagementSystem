@@ -11,7 +11,6 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
 import com.google.gson.Gson;
 
 public class AddressBookTest 
@@ -134,5 +133,14 @@ public class AddressBookTest
 		long size  = addressBook.readData(IOService.JSON_IO);
 		Assert.assertEquals(2,size);
 	}
+	
+	@Test
+	public void givenAdressBookDB_WhenRetrived_ShouldatchAddressBookCount() 
+	{
+		AddressBook addressBook = new AddressBook();
+		long count = addressBook.readData(IOService.DB_IO);
+		Assert.assertEquals(3, count);
+	}
+	
 
 }
