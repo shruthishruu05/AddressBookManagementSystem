@@ -8,8 +8,12 @@ import java.util.*;
 import java.util.function.Predicate;
 
 
+
 public class AddressBook implements AddressBookIF 
 {
+	
+	private List<PersonDetails> addressList;
+	
 	public static String CSV_FILE_NAME = "AddressBook-file.csv";
 	public static String TXT_FILE_NAME = "AddressBook-file.txt";
 	public static String JSON_FILE_NAME = "AddressBook-file.json";
@@ -72,6 +76,12 @@ public class AddressBook implements AddressBookIF
 		else if(type.equals(IOService.JSON_IO)) {
 			JsonServiceProvider jsonIO = new JsonServiceProvider();
 			count  = jsonIO.readData(JSON_FILE_NAME);
+		}
+		else if(type.equals(IOService.DB_IO)) {
+			AdressBookDBService addressBookDBService = new AdressBookDBService();
+			List<PersonDetails> contactList = addressBookDBService.readData();
+			System.out.println(contactList);
+			return contactList.size();
 		}
 		return count;
 	}
@@ -233,5 +243,18 @@ public class AddressBook implements AddressBookIF
 			e.printStackTrace();
 		}
 	}
+
+	public List<PersonDetails> readAddressBookData(IOService dbIo) {
+			try {
+				if(dbIo.equals(IOService.DB_IO))
+					this.addressList = new AdressBookDBService().readData();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			    return this.addressList;
+				
+		}
+		
+	}
 	
-}
