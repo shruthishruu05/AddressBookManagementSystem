@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.*; 
 import java.util.function.Predicate;
+
 
 
 
@@ -13,6 +15,8 @@ public class AddressBook implements AddressBookIF
 {
 	
 	private List<PersonDetails> addressList;
+	
+	private AdressBookDBService addressDBService;
 	
 	public static String CSV_FILE_NAME = "AddressBook-file.csv";
 	public static String TXT_FILE_NAME = "AddressBook-file.txt";
@@ -255,6 +259,19 @@ public class AddressBook implements AddressBookIF
 			    return this.addressList;
 				
 		}
-		
+
+
+	public List<PersonDetails> getPersonDetailsBasedOnName(IOService dbIo, String name)throws NullPointerException {
+		if(dbIo.equals(IOService.DB_IO)) {
+			this.addressList = addressDBService.getPersonDetailsBasedOnNameUsingStatement(name);
+			System.out.println("getting person details based on name");
+			
+		}
+		return this.addressList;
+			
+		}
 	}
+	
+	
+	
 	
