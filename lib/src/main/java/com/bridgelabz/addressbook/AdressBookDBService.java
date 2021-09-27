@@ -1,6 +1,7 @@
 package com.bridgelabz.addressbook;
 
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -12,7 +13,8 @@ import com.mysql.jdbc.Connection;
 
 
 public class AdressBookDBService {
-	
+	private PreparedStatement addressDataStatement;
+	private static List<PersonDetails> addressList;
 	public List<PersonDetails> readData() {
 		String sql = "SELECT * FROM contacts";
 		List<PersonDetails> contactList = new ArrayList<>();
@@ -48,4 +50,55 @@ public class AdressBookDBService {
 		return connection;
 	
 	}
+	private void prepareStatementForAddressData() {
+		
+		try {
+			Connection connection = this.getConnection();
+			String sqlStatement = "SELECT * FROM Address_Book WHERE name = ?;";
+			addressDataStatement = connection.prepareStatement(sqlStatement);
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+private List<PersonDetails> getAddressData(ResultSet resultSet) {
+		
+	addressList = new ArrayList<>();
+		
+		try {
+			while(resultSet.next()) {
+				String firstName = resultSet.getString("firstname");
+				String lastName = resultSet.getString("lastName");
+				String address = resultSet.getString("address");
+				String city  = resultSet.getString("city");
+				String state   = resultSet.getString("state ");
+				String phoneNumber   = resultSet.getString("phoneNumber ");
+				int pinCode   = resultSet.getInt("pinCode");
+				String email   = resultSet.getString("email");
+				addressList.add(new PersonDetails(firstName,lastName, address, city,state,phoneNumber,pinCode,email));
+				
+			}
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return addressList;
+		
+	}
+	
+	public List<PersonDetails> getPersonDetailsBasedOnNameUsingStatement(String name) {
+		String sqlStatement = String.format("SELECT * FROM Address_Book WHERE firstName  = '%s';",name);
+		List<PersonDetails> addressList = new ArrayList<>();
+				
+		try (Connection connection = getConnection();){
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(sqlStatement);
+			addressList = this.getAddressData(resultSet);
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return addressList;
+	}
+	
 }
