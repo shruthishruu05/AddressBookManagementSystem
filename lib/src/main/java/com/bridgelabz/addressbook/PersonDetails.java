@@ -5,8 +5,7 @@ import com.opencsv.bean.CsvBindByName;
 
 public class PersonDetails 
 {
-	@CsvBindByName
-    private String firstName;
+	@CsvBindByName String firstName;
 	@CsvBindByName
     private String lastName;
 	@CsvBindByName
@@ -23,7 +22,22 @@ public class PersonDetails
     private String email;
     
     
-    //setters
+	public PersonDetails(String firstName, String lastName, String address, String city, String state,
+			String phoneNumber, int pinCode, String email) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.address = address;
+		this.city = city;
+		this.state = state;
+		this.phoneNumber = phoneNumber;
+		this.pinCode = pinCode;
+		this.email = email;
+	}
+	public PersonDetails() {
+		// TODO Auto-generated constructor stub
+	}
+	//setters
     public void setFirstName(String firstName) {
     	this.firstName = firstName;
     }
