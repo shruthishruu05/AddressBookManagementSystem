@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -140,6 +141,24 @@ public class AddressBookTest
 		AddressBook addressBook = new AddressBook();
 		long count = addressBook.readData(IOService.DB_IO);
 		Assert.assertEquals(3, count);
+	}
+	
+	@Test
+	public void givenName_WhenFound_ShouldReturnEmployeeDetails() throws NullPointerException {
+		
+		AddressBook addressBook = new AddressBook();
+		String name = "Anu";
+		List<PersonDetails> addresList;
+		try {
+			addresList = addressBook.getPersonDetailsBasedOnName(IOService.DB_IO, name);
+			String resultName = addresList.get(0).firstName;
+			Assert.assertEquals(name, resultName);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 	}
 	
 
