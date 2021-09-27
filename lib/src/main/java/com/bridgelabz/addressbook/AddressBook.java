@@ -262,7 +262,8 @@ public class AddressBook implements AddressBookIF
 
 
 	public List<PersonDetails> getPersonDetailsBasedOnName(IOService dbIo, String name)throws NullPointerException {
-		if(dbIo.equals(IOService.DB_IO)) {
+		if(dbIo.equals(IOService.DB_IO)) 
+		{
 			this.addressList = addressDBService.getPersonDetailsBasedOnNameUsingStatement(name);
 			System.out.println("getting person details based on name");
 			
