@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import com.mysql.jdbc.Connection;
 
-
 public class AdressBookDBService {
 	private PreparedStatement addressDataStatement;
 	private static List<PersonDetails> addressList;
@@ -176,6 +175,45 @@ private List<PersonDetails> getAddressData(ResultSet resultSet) {
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
+		}
+		return contactList;
+	}
+	
+	public contacts addContactToAddress(String firstName, String lastName, String phoneNumber, String email) 
+	{
+		int contactID = -1;
+		contacts contactData = null;
+		String sql = String.format("INSERT INTO contacts(firstname,lastname,phoneNumber,email) VALUES('%s','%s','%s','%s')",firstName,lastName,phoneNumber,email);
+		try {
+			Connection connection = this.getConnection();
+			Statement statement = connection.createStatement();
+			int result = statement.executeUpdate(sql,statement.RETURN_GENERATED_KEYS);
+			if(result == 1) {
+				ResultSet resultSet = statement.getGeneratedKeys();
+				if(resultSet.next()) contactID = resultSet.getInt(1);
+			}
+			connection.close();
+			contactData = new contacts(firstName,lastName,phoneNumber,email);
+		}
+			catch(SQLException e) 
+			{
+				e.printStackTrace();
+			}
+			System.out.println(contactData);
+		return contactData; 	
+	}
+	public List<contacts> getContactsBasedOnStartDateUsingPreparedStatement(String startDate, String endDate) {
+		
+		String sqlStatement = String.format("SELECT * FROM contacts WHERE added BETWEEN '%s' AND '%s';",startDate, endDate);
+		List<contacts> contactList = new ArrayList<>();
+				
+		try (Connection connection = getConnection();){
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(sqlStatement);
+			contactList = this.getAddressContactData(resultSet);
+		}
+		catch(SQLException exception){
+			exception.printStackTrace();
 		}
 		return contactList;
 	}
