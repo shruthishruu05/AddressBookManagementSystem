@@ -323,7 +323,17 @@ public class AddressBook implements AddressBookIF
 		}
 		return this.addressBookList;
 	}
-	
+	public void addContactToUpdatedDatabse(int id, String firstName, String lastName, String phoneNumber, String email) {
+			addressBookList.add(addressDBService.addNewContactToContacts(firstName, lastName, phoneNumber, email));
+		}
+
+	public contacts writeContactDetails(String firstName, String lastName, String phoneNumber, String email) {
+		// TODO Auto-generated method stub
+		contacts resultContacts = addressDBService.addNewContactToContacts(firstName, lastName, phoneNumber, email);
+		return resultContacts;
+		
+	}
+		
 }
 	
 	
