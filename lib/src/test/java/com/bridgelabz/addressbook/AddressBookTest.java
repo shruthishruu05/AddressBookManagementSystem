@@ -190,5 +190,12 @@ public class AddressBookTest
 		List<contacts> contactData = addressBook.getContactsBasedOnStartDateUsingPreparedStatement(IOService.DB_IO, startDate, endDate);
 		Assert.assertEquals(5, contactData.size());
 	}
+	@Test
+	public void givenContactDB_WhenRetrived_ShouldReturnNumberOfContactsBasedCityOrState() 
+	{
+		AddressBook addressBook = new AddressBook();
+		List<contacts> contactData = addressBook.readContactDataDB(IOService.DB_IO,"bangalore","Karnataka");
+		Assert.assertEquals(3, contactData.size());
+	}
 
 }
