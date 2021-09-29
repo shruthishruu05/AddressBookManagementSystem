@@ -298,7 +298,6 @@ public class AddressBook implements AddressBookIF
 		}
 	
 	public boolean checkContactsSyncWithDB(String name) {
-		// TODO Auto-generated method stub
 		List<contacts> contactDataList = addressDBService.getContactData(name);
 		return contactDataList.get(0).equals(getContactData(name));
 		
