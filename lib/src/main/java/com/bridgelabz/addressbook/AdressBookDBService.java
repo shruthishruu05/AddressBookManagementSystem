@@ -231,5 +231,92 @@ private List<PersonDetails> getAddressData(ResultSet resultSet) {
 			exception.printStackTrace();
 		}
 		return contactList;
+	}
+	public List<contacts> readContactDetails(String firstName, String lastName, String phoneNumber, String email) {
+		
+		String sqlStatement = "SELECT * FROM contact JOIN address ON contact.address_id = address.address_id;";
+		List<contacts> contactsList = new ArrayList<>();
+				
+		try (Connection connection = getConnection();){
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(sqlStatement);
+			contactsList = getAddressContactData(resultSet);
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return contactsList;
 	}	
-}
+	public contacts addNewContactToContacts( String firstName, String lastName, String phoneNumber, String email) {
+			
+			int id = -1;
+			Connection connection = null;
+			contacts contactPerson = null;
+			
+			try {
+				connection = this.getConnection();
+				connection.setAutoCommit(false);
+			}
+			catch(SQLException exception) {
+				exception.printStackTrace();
+			}
+			try (Statement statement = connection.createStatement()){
+				
+				String sql = String.format("INSERT INTO contact (contact_id, first_name, last_name, phone_number, email, address_id, date_added) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s');", firstName, lastName, phoneNumber, email);
+				
+				int rowAffected = statement.executeUpdate(sql, statement.RETURN_GENERATED_KEYS);
+				if(rowAffected == 1) {
+					ResultSet resultSet = statement.getGeneratedKeys();
+					if(resultSet.next())
+						id = resultSet.getInt(1);
+				}
+				contactPerson = new contacts( firstName, lastName, email, phoneNumber);
+				
+			}
+			catch(SQLException e) {
+				e.printStackTrace();
+				try {
+					connection.rollback();
+					return contactPerson;
+				} catch (SQLException exception) {
+					exception.printStackTrace();
+				}
+			}
+			
+			try(Statement statement = connection.createStatement()){
+	
+				String sqlQuery = String.format("INSERT INTO contacts VALUES ('%s', '%s', '%s', '%s')",firstName, lastName, phoneNumber, email);
+				int rowAffected = statement.executeUpdate(sqlQuery);
+				if (rowAffected == 1) {
+					contactPerson = new contacts(firstName, lastName,phoneNumber,email);
+				}			
+			}
+			catch(SQLException e) {
+				e.printStackTrace();
+				try {
+					connection.rollback();
+				} catch (SQLException exception) {
+					exception.printStackTrace();
+				}
+			}
+			
+			try {
+				connection.commit();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			finally {
+				if(connection != null)
+					try {
+						connection.close();
+					} 
+				catch (SQLException e) 
+				{
+					e.printStackTrace();
+				}
+			}
+			return contactPerson;
+		}
+	
+	}
+	
