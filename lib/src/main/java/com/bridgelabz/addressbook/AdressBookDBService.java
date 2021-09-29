@@ -8,7 +8,6 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.mysql.jdbc.Connection;
 
 
@@ -37,6 +36,29 @@ public class AdressBookDBService {
 		}
 		return contactList;
 	}
+	public List<contacts> readContactData() {
+		String sql = "SELECT * FROM contacts";
+		List<contacts> contactList = new ArrayList<>();
+		try {
+			Connection connection = this.getConnection();
+			Statement statement = connection.createStatement();
+			ResultSet result = statement.executeQuery(sql);
+			while(result.next()) {
+				contacts person  = new contacts();
+				person.setFirstName(result.getString("firstName"));
+				person.setLastName(result.getString("lastName"));
+				person.setPhoneNumber(result.getString("phoneNumber"));
+				person.setEmail(result.getString("email"));
+				contactList.add(person);
+			}
+			connection.close();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return contactList;
+	}
+	
 	
 	public Connection getConnection() throws SQLException
 	{
@@ -61,6 +83,17 @@ public class AdressBookDBService {
 			e.printStackTrace();
 		}
 	}
+	private void prepareStatementForContactData() {
+			
+			try {
+				Connection connection = this.getConnection();
+				String sqlStatement = "SELECT * FROM contacts WHERE name = ?;";
+				addressDataStatement = connection.prepareStatement(sqlStatement);
+			}
+			catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
 private List<PersonDetails> getAddressData(ResultSet resultSet) {
 		
 	addressList = new ArrayList<>();
@@ -99,6 +132,52 @@ private List<PersonDetails> getAddressData(ResultSet resultSet) {
 			e.printStackTrace();
 		}
 		return addressList;
+	}
+	public int updateContact(String firstName, String lastName, String phoneNumber, String email) 
+	{
+		String sqlString = String.format("update contacts set lastName ='%s',phoneNumber ='%s',email='%s' where firstName= '%s';",lastName,phoneNumber,email,firstName);
+		try(Connection connection = this.getConnection()) {
+			Statement statement = connection.createStatement();
+			return statement.executeUpdate(sqlString);
+		}
+		catch(SQLException e) 
+		{
+			e.printStackTrace();
+		}return 0;
+	}
+	
+	public List<contacts> getAddressContactData(ResultSet resultSet) {
+		// TODO Auto-generated method stub
+		List<contacts> contactList = new ArrayList<>();
+		try {
+			while(resultSet.next()) {
+				String firstName = resultSet.getString("firstName");
+				String lastName = resultSet.getString("lastName");
+				String phoneNumber = resultSet.getString("phoneNumber");
+				String email = resultSet.getString("email");
+				contactList.add(new contacts(firstName, lastName, phoneNumber,email));
+			}
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return contactList;
+		
+	}
+	public List<contacts> getContactData(String name) {
+		List<contacts> contactList = null;
+		if(this.addressDataStatement == null) {
+			this.prepareStatementForContactData();
+		}
+		try {
+			addressDataStatement.setString(1, name);
+			ResultSet resultSet = addressDataStatement.executeQuery();
+			contactList = this.getAddressContactData(resultSet);
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return contactList;
 	}
 	
 }
