@@ -1,5 +1,7 @@
 package com.bridgelabz.addressbook;
 
+import static org.junit.Assert.*;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -156,10 +158,18 @@ public class AddressBookTest
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}	
+	}
+	@Test
+	public void givenNewContactForPerson_WhenUpdated_ShouldSyncWithDB()  
+	{
+		AddressBook addressBook = new AddressBook();
 		
+		List<contacts> contactList = addressBook.readAddressBookContactData(IOService.DB_IO);
+		int val = addressBook.updateContact("Shruthi","L","9632587412","neha@gmail.com");
+		boolean result = addressBook.checkContactsSyncWithDB("Sruthi");
+		Assert.assertEquals(val,val);
 		
 	}
-	
 
 }
