@@ -303,6 +303,18 @@ public class AddressBook implements AddressBookIF
 		
 	}
 	
+	public void addContactToAddress(String firstName, String lastName, String phoneNumber, String email) 
+	{
+		addressBookList.add(addressDBService.addContactToAddress(firstName,lastName,phoneNumber,email));	
+	}
+	
+	public List<contacts> getContactsBasedOnStartDateUsingPreparedStatement(IOService ioService, String startDate, String endDate) {
+			
+			if(ioService.equals(IOService.DB_IO))
+				this.addressBookList = addressDBService.getContactsBasedOnStartDateUsingPreparedStatement(startDate, endDate);
+			return this.addressBookList;
+		}
+	
 }
 	
 	
