@@ -5,16 +5,17 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*; 
 import java.util.function.Predicate;
-
-
+import com.mysql.jdbc.Connection;
 
 
 public class AddressBook implements AddressBookIF 
 {
 	
 	private List<PersonDetails> addressList;
+	private List<contacts> addressBookList;
 	
 	private AdressBookDBService addressDBService;
 	
@@ -259,6 +260,17 @@ public class AddressBook implements AddressBookIF
 			    return this.addressList;
 				
 		}
+	public List<contacts> readAddressBookContactData(IOService dbIo) {
+		try {
+			if(dbIo.equals(IOService.DB_IO))
+				this.addressBookList = new AdressBookDBService().readContactData();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		    return this.addressBookList;
+			
+	}
 
 
 	public List<PersonDetails> getPersonDetailsBasedOnName(IOService dbIo, String name)throws NullPointerException {
@@ -271,8 +283,28 @@ public class AddressBook implements AddressBookIF
 		return this.addressList;
 			
 		}
+
+	public int updateContact(String firstName, String lastName, String phoneNumber, String email) {
+		// TODO Auto-generated method stub
+		return addressDBService.updateContact(firstName, lastName, phoneNumber, email);
+		
+		
+	}
+		private contacts getContactData(String name) {
+			return this.addressBookList.stream()
+					   .filter(contacts -> contacts.getFirstName().equals(name))
+					   .findFirst()
+					   .orElse(null);
+		}
+	
+	public boolean checkContactsSyncWithDB(String name) {
+		// TODO Auto-generated method stub
+		List<contacts> contactDataList = addressDBService.getContactData(name);
+		return contactDataList.get(0).equals(getContactData(name));
+		
 	}
 	
+}
 	
 	
 	
