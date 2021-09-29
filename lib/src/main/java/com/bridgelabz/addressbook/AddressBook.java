@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*; 
 import java.util.function.Predicate;
+
 import com.mysql.jdbc.Connection;
 
 
@@ -314,6 +315,14 @@ public class AddressBook implements AddressBookIF
 				this.addressBookList = addressDBService.getContactsBasedOnStartDateUsingPreparedStatement(startDate, endDate);
 			return this.addressBookList;
 		}
+	
+
+	public List<contacts> readContactDataDB(IOService dbIo, String city, String state) {
+		if(dbIo.equals(IOService.DB_IO)) {
+			this.addressBookList = addressDBService.readContactAddressData(city,state);
+		}
+		return this.addressBookList;
+	}
 	
 }
 	

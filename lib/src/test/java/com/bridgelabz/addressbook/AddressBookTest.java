@@ -200,6 +200,25 @@ public class AddressBookTest
 		AddressBook addressBook = new AddressBook();
 		List<contacts> contactData = addressBook.readContactDataDB(IOService.DB_IO,"bangalore","Karnataka");
 		Assert.assertEquals(size, contactData.size());
+	}
+		
+	@Test
+	public void givenContactDB_WhenRetrived_ShouldReturnNumberOfContactsBasedCityOrState() 
+	{
+		AddressBook addressBook = new AddressBook();
+		List<contacts> contactData = addressBook.readContactDataDB(IOService.DB_IO,"bangalore","Karnataka");
+		Assert.assertEquals(3, contactData.size());
+
+	}
+	@Test
+	public void givenNewEmployee_WhenAdded_ShouldSyncWithUpdatedDB() {
+		
+		String dateAdded = "2017-02-12";
+		AddressBook addressBook = new AddressBook();
+		List<contacts> contactData = addressBook.readAddressBookContactData(IOService.DB_IO);
+		addressBook.writeContactDetails("Adam", "J", "9876545678", "adam@gmail.com");
+		boolean result = addressBook.checkContactsSyncWithDB("Amy");
+		Assert.assertTrue(result);
 		
 	}
 

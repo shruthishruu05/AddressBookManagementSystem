@@ -217,5 +217,19 @@ private List<PersonDetails> getAddressData(ResultSet resultSet) {
 		}
 		return contactList;
 	}
-	
+	public List<contacts> readContactAddressData(String city, String state) {
+		String sqlStatement = String.format("SELECT count(c.contact_id) from contacts c , Place p"
+				+ "WHERE c.contact_id =p.contact_id  and p.city = '%s' and p.state ='%s';",city,state);
+		List<contacts> contactList = new ArrayList<>();
+		
+		try (Connection connection = getConnection();){
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(sqlStatement);
+			contactList = this.getAddressContactData(resultSet);
+		}
+		catch(SQLException exception){
+			exception.printStackTrace();
+		}
+		return contactList;
+	}	
 }
