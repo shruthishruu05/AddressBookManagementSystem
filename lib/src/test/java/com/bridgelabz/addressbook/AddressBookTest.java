@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -164,12 +167,28 @@ public class AddressBookTest
 	public void givenNewContactForPerson_WhenUpdated_ShouldSyncWithDB()  
 	{
 		AddressBook addressBook = new AddressBook();
-		
 		List<contacts> contactList = addressBook.readAddressBookContactData(IOService.DB_IO);
 		int val = addressBook.updateContact("Shruthi","L","9632587412","neha@gmail.com");
 		boolean result = addressBook.checkContactsSyncWithDB("Sruthi");
 		Assert.assertEquals(val,val);
 		
+	}
+	
+	@Test
+	public void givenListOfContact_WhenInserted_ShouldMatchContactEntries() 
+	{
+		AddressBook addressBook = new AddressBook();
+		addressBook.addContactToAddress("Sita","K","9535082363","sita@gmail.com");
+		boolean result = addressBook.checkContactsSyncWithDB("Sita");
+	}
+	@Test
+	public void givenStartDateRange_WhenMatchesUsingPreparedStatement_ShouldReturnEmployeeDetails() {
+		
+		String startDate = "2018-01-01";
+		String endDate = "2021-01-01";
+		AddressBook addressBook = new AddressBook();
+		List<contacts> contactData = addressBook.getContactsBasedOnStartDateUsingPreparedStatement(IOService.DB_IO, startDate, endDate);
+		Assert.assertEquals(5, contactData.size());
 	}
 
 }
