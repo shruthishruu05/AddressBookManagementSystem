@@ -17,10 +17,13 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+
 import com.google.gson.Gson;
 
 public class AddressBookTest 
 {
+	int size = 3;
 	PersonDetails person1;
 	PersonDetails person2;
 	@Before
@@ -189,6 +192,15 @@ public class AddressBookTest
 		AddressBook addressBook = new AddressBook();
 		List<contacts> contactData = addressBook.getContactsBasedOnStartDateUsingPreparedStatement(IOService.DB_IO, startDate, endDate);
 		Assert.assertEquals(5, contactData.size());
+	}
+	@Test
+	public void givenContactDB_WhenRetrived_ShouldReturnNumberOfContactsBasesOnCityOrState() 
+	{
+		
+		AddressBook addressBook = new AddressBook();
+		List<contacts> contactData = addressBook.readContactDataDB(IOService.DB_IO,"bangalore","Karnataka");
+		Assert.assertEquals(size, contactData.size());
+		
 	}
 
 }
