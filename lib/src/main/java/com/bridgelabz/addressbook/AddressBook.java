@@ -15,10 +15,10 @@ import com.mysql.jdbc.Connection;
 public class AddressBook implements AddressBookIF 
 {
 	
-	private List<PersonDetails> addressList;
-	private List<contacts> addressBookList;
+	private static List<PersonDetails> addressList = new ArrayList<PersonDetails>();
+	private static List<contacts> addressBookList = new ArrayList<contacts>();
 	
-	private AdressBookDBService addressDBService;
+	private AdressBookDBService addressDBService = new AdressBookDBService();
 	
 	public static String CSV_FILE_NAME = "AddressBook-file.csv";
 	public static String TXT_FILE_NAME = "AddressBook-file.txt";
@@ -274,7 +274,7 @@ public class AddressBook implements AddressBookIF
 	}
 
 
-	public List<PersonDetails> getPersonDetailsBasedOnName(IOService dbIo, String name)throws NullPointerException {
+	public List<PersonDetails> getPersonDetailsBasedOnName(IOService dbIo, String name) {
 		if(dbIo.equals(IOService.DB_IO)) 
 		{
 			this.addressList = addressDBService.getPersonDetailsBasedOnNameUsingStatement(name);
@@ -299,7 +299,8 @@ public class AddressBook implements AddressBookIF
 		}
 	
 	public boolean checkContactsSyncWithDB(String name) {
-		List<contacts> contactDataList = addressDBService.getContactData(name);
+		List<contacts> contactDataList = new ArrayList<contacts>();
+		contactDataList = addressDBService.getContactData(name);
 		return contactDataList.get(0).equals(getContactData(name));
 		
 	}
@@ -323,15 +324,31 @@ public class AddressBook implements AddressBookIF
 		}
 		return this.addressBookList;
 	}
-	public void addContactToUpdatedDatabse(int id, String firstName, String lastName, String phoneNumber, String email) {
-			addressBookList.add(addressDBService.addNewContactToContacts(firstName, lastName, phoneNumber, email));
-		}
+	public void addContactToUpdatedDatabse( String firstName, String lastName, String phoneNumber, String email,String added) {
+			addressBookList.add(addressDBService.addContactToAddress(firstName, lastName, phoneNumber, email));
+	}
 
-	public contacts writeContactDetails(String firstName, String lastName, String phoneNumber, String email) {
-		// TODO Auto-generated method stub
-		contacts resultContacts = addressDBService.addNewContactToContacts(firstName, lastName, phoneNumber, email);
-		return resultContacts;
+//	public contacts writeContactDetails(String firstName, String lastName, String phoneNumber, String email) {
+//		// TODO Auto-generated method stub
+//		contacts resultContacts = addressDBService.addNewContactToContacts(firstName, lastName, phoneNumber, email);
+//		return resultContacts;
+//		
+//	}
+
+	public List<contacts> getEmployeeDetailsBasedOnCity(IOService ioService, String city) {
 		
+		List<contacts> contactsList = new ArrayList<contacts>();
+		if(ioService.equals(IOService.DB_IO))
+			contactsList = addressDBService.getContactDetailsBasedOnCityUsingStatement(city);
+		return contactsList;
+	}
+
+	public List<contacts> getEmployeeDetailsBasedOnState(IOService ioService, String state) {
+		
+		List<contacts> contactsList = new ArrayList<contacts>();
+		if(ioService.equals(IOService.DB_IO))
+			contactsList = addressDBService.getContactDetailsBasedOnStateUsingStatement(state);
+		return contactsList;
 	}
 		
 }
