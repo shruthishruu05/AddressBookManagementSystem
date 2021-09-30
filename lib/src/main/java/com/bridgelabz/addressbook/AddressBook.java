@@ -328,12 +328,6 @@ public class AddressBook implements AddressBookIF
 			addressBookList.add(addressDBService.addContactToAddress(firstName, lastName, phoneNumber, email));
 	}
 
-//	public contacts writeContactDetails(String firstName, String lastName, String phoneNumber, String email) {
-//		// TODO Auto-generated method stub
-//		contacts resultContacts = addressDBService.addNewContactToContacts(firstName, lastName, phoneNumber, email);
-//		return resultContacts;
-//		
-//	}
 
 	public List<contacts> getEmployeeDetailsBasedOnCity(IOService ioService, String city) {
 		
