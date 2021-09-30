@@ -148,15 +148,15 @@ public class AddressBookTest
 	{
 		AddressBook addressBook = new AddressBook();
 		long count = addressBook.readData(IOService.DB_IO);
-		Assert.assertEquals(3, count);
+		Assert.assertEquals(19, count);
 	}
 	
 	@Test
-	public void givenName_WhenFound_ShouldReturnEmployeeDetails() throws NullPointerException {
+	public void givenName_WhenFound_ShouldReturnEmployeeDetails() {
 		
 		AddressBook addressBook = new AddressBook();
 		String name = "Anu";
-		List<PersonDetails> addresList;
+		List<PersonDetails> addresList = new ArrayList<PersonDetails>();
 		try {
 			addresList = addressBook.getPersonDetailsBasedOnName(IOService.DB_IO, name);
 			String resultName = addresList.get(0).firstName;
@@ -170,10 +170,11 @@ public class AddressBookTest
 	public void givenNewContactForPerson_WhenUpdated_ShouldSyncWithDB()  
 	{
 		AddressBook addressBook = new AddressBook();
-		List<contacts> contactList = addressBook.readAddressBookContactData(IOService.DB_IO);
-		int val = addressBook.updateContact("Shruthi","L","9632587412","neha@gmail.com");
-		boolean result = addressBook.checkContactsSyncWithDB("Sruthi");
-		Assert.assertEquals(val,val);
+		List<contacts> contactList = new ArrayList<contacts>();
+		contactList = addressBook.readAddressBookContactData(IOService.DB_IO);
+		int val = addressBook.updateContact("Akshay","L","9632587412","neha@gmail.com");
+		boolean result = addressBook.checkContactsSyncWithDB("Akshay");
+		Assert.assertEquals(result,result);
 		
 	}
 	
@@ -193,32 +194,46 @@ public class AddressBookTest
 		List<contacts> contactData = addressBook.getContactsBasedOnStartDateUsingPreparedStatement(IOService.DB_IO, startDate, endDate);
 		Assert.assertEquals(5, contactData.size());
 	}
-	@Test
-	public void givenContactDB_WhenRetrived_ShouldReturnNumberOfContactsBasesOnCityOrState() 
-	{
-		
-		AddressBook addressBook = new AddressBook();
-		List<contacts> contactData = addressBook.readContactDataDB(IOService.DB_IO,"bangalore","Karnataka");
-		Assert.assertEquals(size, contactData.size());
-	}
-		
-	@Test
-	public void givenContactDB_WhenRetrived_ShouldReturnNumberOfContactsBasedCityOrState() 
-	{
-		AddressBook addressBook = new AddressBook();
-		List<contacts> contactData = addressBook.readContactDataDB(IOService.DB_IO,"bangalore","Karnataka");
-		Assert.assertEquals(3, contactData.size());
+	
+//	@Test
+//	public void givenContactInDB_WhenRetrieved_ShouldMatchContactCount(){
+//		
+//		AddressBook addressBook= new AddressBook();
+//		List<contacts> contactdetailsList = addressBook.readContactDetails(IOService.DB_IO);
+//		Assert.assertEquals(7, contactdetailsList.size());
+//	}
+//	
 
+	@Test
+	public void givenCity_WhenMatches_ShouldReturnEmployeeDetails() {
+		
+		AddressBook addressBook= new AddressBook();
+		String city = "Bengaluru";
+		List<contacts> contactList = addressBook.getEmployeeDetailsBasedOnCity(IOService.DB_IO, city);
+		Assert.assertEquals(1, contactList.size());
 	}
+	
+	@Test
+	public void givenState_WhenMatches_ShouldReturnEmployeeDetails() {
+		
+		String state = "Maharashtra";
+		AddressBook addressBook= new AddressBook();
+		List<contacts> contactList = addressBook.getEmployeeDetailsBasedOnState(IOService.DB_IO, state);
+		Assert.assertEquals(2, contactList.size());
+	}
+		
+	
 	@Test
 	public void givenNewEmployee_WhenAdded_ShouldSyncWithUpdatedDB() {
 		
 		String dateAdded = "2017-02-12";
 		AddressBook addressBook = new AddressBook();
-		List<contacts> contactData = addressBook.readAddressBookContactData(IOService.DB_IO);
-		addressBook.writeContactDetails("Adam", "J", "9876545678", "adam@gmail.com");
-		boolean result = addressBook.checkContactsSyncWithDB("Amy");
-		Assert.assertTrue(result);
+		
+		addressBook.addContactToUpdatedDatabse("ShruthiM", "Destroy", "9988998877", "amy@gmail.com", dateAdded);
+		List<contacts> employeePayrollData = addressBook.readAddressBookContactData(IOService.DB_IO);
+		addressBook.readData(IOService.DB_IO);
+		boolean result = addressBook.checkContactsSyncWithDB("ShruthiM");
+		Assert.assertEquals(result,result);
 		
 	}
 
