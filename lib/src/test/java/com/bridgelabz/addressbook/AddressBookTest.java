@@ -195,14 +195,6 @@ public class AddressBookTest
 		Assert.assertEquals(5, contactData.size());
 	}
 	
-//	@Test
-//	public void givenContactInDB_WhenRetrieved_ShouldMatchContactCount(){
-//		
-//		AddressBook addressBook= new AddressBook();
-//		List<contacts> contactdetailsList = addressBook.readContactDetails(IOService.DB_IO);
-//		Assert.assertEquals(7, contactdetailsList.size());
-//	}
-//	
 
 	@Test
 	public void givenCity_WhenMatches_ShouldReturnEmployeeDetails() {
@@ -236,5 +228,4 @@ public class AddressBookTest
 		Assert.assertEquals(result,result);
 		
 	}
-
 }
