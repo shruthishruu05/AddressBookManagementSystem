@@ -133,7 +133,6 @@ public class AddressBookTest
 		}
 		Assert.assertEquals(2,count);
 	}
-	
 	@Test
 	public void whenCalled_ReadFromJsonMethod_ShouldPrintFile() {
 		AddressBook addressBook = new AddressBook();	
