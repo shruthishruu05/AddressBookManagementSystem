@@ -1,5 +1,4 @@
 package com.bridgelabz.addressbook;
-
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,6 +12,7 @@ import com.mysql.jdbc.Connection;
 public class AdressBookDBService {
 	private PreparedStatement addressDataStatement;
 	private static List<PersonDetails> addressList;
+	
 	public List<PersonDetails> readData() {
 		String sql = "SELECT * FROM contacts";
 		List<PersonDetails> contactList = new ArrayList<>();
