@@ -152,7 +152,7 @@ public class AddressBookTest
 	}
 	
 	@Test
-	public void givenName_WhenFound_ShouldReturnEmployeeDetails() {
+	public void givenName_WhenFound_ShouldReturnPersonDetails() {
 		
 		AddressBook addressBook = new AddressBook();
 		String name = "Anu";
@@ -172,7 +172,7 @@ public class AddressBookTest
 		AddressBook addressBook = new AddressBook();
 		List<contacts> contactList = new ArrayList<contacts>();
 		contactList = addressBook.readAddressBookContactData(IOService.DB_IO);
-		int val = addressBook.updateContact("Akshay","L","9632587412","neha@gmail.com");
+		int val = addressBook.updateContact("Neha","L","9632587412","neha@gmail.com");
 		boolean result = addressBook.checkContactsSyncWithDB("Akshay");
 		Assert.assertEquals(result,result);
 		
@@ -221,7 +221,7 @@ public class AddressBookTest
 		String dateAdded = "2017-02-12";
 		AddressBook addressBook = new AddressBook();
 		
-		addressBook.addContactToUpdatedDatabse("ShruthiM", "Destroy", "9988998877", "amy@gmail.com", dateAdded);
+		addressBook.addContactToUpdatedDatabse("Adam", "Matt", "9988998877", "adam@gmail.com", dateAdded);
 		List<contacts> employeePayrollData = addressBook.readAddressBookContactData(IOService.DB_IO);
 		addressBook.readData(IOService.DB_IO);
 		boolean result = addressBook.checkContactsSyncWithDB("ShruthiM");
