@@ -135,7 +135,8 @@ public class AddressBookTest
 		Assert.assertEquals(2,count);
 	}
 	@Test
-	public void whenCalled_ReadFromJsonMethod_ShouldPrintFile() {
+	public void whenCalled_ReadFromJsonMethod_ShouldPrintFile() 
+	{
 		AddressBook addressBook = new AddressBook();	
 		addressBook.addPerson(person1, IOService.JSON_IO);
 		addressBook.addPerson(person2, IOService.JSON_IO);
