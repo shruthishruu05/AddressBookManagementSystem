@@ -283,7 +283,8 @@ private List<PersonDetails> getAddressData(ResultSet resultSet) {
 				contactList.add(new contacts(contactId, firstName, lastName, phoneNumber,email, added));
 			}
 		}
-		catch(SQLException e) {
+		catch(SQLException e) 
+		{
 			e.printStackTrace();
 		}
 		return contactList;
