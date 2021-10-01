@@ -128,7 +128,8 @@ public class AddressBookTest
 			List<PersonDetails> csvUSerList = Arrays.asList(usrObj);
 			count = csvUSerList.size();
 		}
-		catch(IOException e) {
+		catch(IOException e) 
+		{
 			e.printStackTrace();
 		}
 		Assert.assertEquals(2,count);
