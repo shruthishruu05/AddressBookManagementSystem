@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import com.mysql.jdbc.Connection;
 
-public class AdressBookDBService {
+public class DBServiceAdressBook {
+	
 	private PreparedStatement addressDataStatement;
 	private static List<PersonDetails> addressList;
 	
@@ -93,30 +94,30 @@ public class AdressBookDBService {
 				e.printStackTrace();
 			}
 		}
-private List<PersonDetails> getAddressData(ResultSet resultSet) {
-		
-	addressList = new ArrayList<>();
-		
-		try {
-			while(resultSet.next()) {
-				String firstName = resultSet.getString("firstname");
-				String lastName = resultSet.getString("lastName");
-				String address = resultSet.getString("address");
-				String city  = resultSet.getString("city");
-				String state   = resultSet.getString("state");
-				String phoneNumber   = resultSet.getString("phoneNumber");
-				int pinCode   = resultSet.getInt("pinCode");
-				String email   = resultSet.getString("email");
-				addressList.add(new PersonDetails(firstName,lastName, address, city,state,phoneNumber,pinCode,email));
-				
+	private List<PersonDetails> getAddressData(ResultSet resultSet) {
+			
+		addressList = new ArrayList<>();
+			
+			try {
+				while(resultSet.next()) {
+					String firstName = resultSet.getString("firstname");
+					String lastName = resultSet.getString("lastName");
+					String address = resultSet.getString("address");
+					String city  = resultSet.getString("city");
+					String state   = resultSet.getString("state");
+					String phoneNumber   = resultSet.getString("phoneNumber");
+					int pinCode   = resultSet.getInt("pinCode");
+					String email   = resultSet.getString("email");
+					addressList.add(new PersonDetails(firstName,lastName, address, city,state,phoneNumber,pinCode,email));
+					
+				}
 			}
+			catch(SQLException e) {
+				e.printStackTrace();
+			}
+			return addressList;
+			
 		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
-		return addressList;
-		
-	}
 	
 	public List<PersonDetails> getPersonDetailsBasedOnNameUsingStatement(String name) {
 		String sqlStatement = String.format("SELECT * FROM Address_Book WHERE firstName  = '%s';",name);
@@ -245,35 +246,77 @@ private List<PersonDetails> getAddressData(ResultSet resultSet) {
 		}
 		return contactsList;
 	}	
-	public contacts addNewContactToContacts( String firstName, String lastName, String phoneNumber, String email,String added) {
+	
+	public PersonDetails addNewContactToContacts(PersonDetails contactToBeAdded) {
 			
-		Connection connection = null;
-		contacts contactPerson = null;
-			
-		try {
-			connection = this.getConnection();
-			connection.setAutoCommit(false);
+			int id = -1;
+			Connection connection = null;
+			PersonDetails contactPerson = null;
+	
+			try {
+				connection = this.getConnection();
+				connection.setAutoCommit(false);
+			} catch (SQLException exception) {
+				exception.printStackTrace();
+			}
+			try (Statement statement = connection.createStatement()) {
+	
+				String sqlString = String.format(
+						"INSERT INTO contacts (contact_id, first_name, last_name, phone_number, email, address_id, date_added) VALUES ('%d', '%s', '%s', '%s', '%s', '%s', '%s')",
+						contactToBeAdded.getId(), contactToBeAdded.getFirstName(), contactToBeAdded.getLastName(), contactToBeAdded.getPhoneNumber(), contactToBeAdded.getEmail(), contactToBeAdded.getAddress(), contactToBeAdded.getDateAdded());
+	
+				int rowAffected = statement.executeUpdate(sqlString, statement.RETURN_GENERATED_KEYS);
+				if (rowAffected == 1) {
+					ResultSet resultSet = statement.getGeneratedKeys();
+					if (resultSet.next())
+						id = resultSet.getInt(1);
+				}
+				contactPerson = new PersonDetails(id,contactToBeAdded.getFirstName(), contactToBeAdded.getLastName(), contactToBeAdded.getEmail(), contactToBeAdded.getPhoneNumber());
+	
+			} catch (SQLException e) {
+				e.printStackTrace();
+				try {
+					connection.rollback();
+				} catch (SQLException exception) {
+					exception.printStackTrace();
+				}
+			}
+
+			try (Statement statement = connection.createStatement()) {
+				String sqlQuery = String.format("INSERT INTO address(contact_id,address,city,state,zip) values (%d,'%s','%s','%s','%d');",contactToBeAdded.getId(),contactToBeAdded.getAddress(),contactToBeAdded.getCity(),contactToBeAdded.getState(),contactToBeAdded.getPinCode());
+				int rowAffected = statement.executeUpdate(sqlQuery);
+				if (rowAffected == 1) {
+					contactPerson = new PersonDetails(contactToBeAdded.getAddress(),contactToBeAdded.getCity(),contactToBeAdded.getState(),contactToBeAdded.getPinCode());
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				try {
+					connection.rollback();
+				} catch (SQLException exception) {
+					exception.printStackTrace();
+				}
+			}
+			try {
+				connection.commit();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				if (connection != null)
+					try {
+						connection.close();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+			}
+			return contactPerson;
 		}
-		catch(SQLException exception) {
-			exception.printStackTrace();
-		}
-		try (Statement statement = connection.createStatement()){
-				
-			String sql = String.format("INSERT INTO contacts (firstName, lastName, phoneNumber, email, added) VALUES ('%s', '%s', '%s', '%s', '%s');", firstName, lastName, phoneNumber, email,added);
-			statement.executeUpdate(sql);
-			contactPerson = new contacts( firstName, lastName, email, phoneNumber);	
-		}
-		catch(SQLException e) {
-			e.printStackTrace();	
-		}
-		return contactPerson;
-	}
 	private List<contacts> getContactDetails(ResultSet resultSet) {
 		
 		List<contacts> contactList = new ArrayList<>();
 		
 		try {
-			while(resultSet.next()) {
+			while(resultSet.next()) 
+			{
 				int contactId = resultSet.getInt("contact_id");
 				String firstName = resultSet.getString("firstName");
 				String lastName = resultSet.getString("lastName");
@@ -320,6 +363,17 @@ private List<PersonDetails> getAddressData(ResultSet resultSet) {
 			e.printStackTrace();
 		}
 		return contactList;
+	}
+	public void demoQuery(String sql) {
+		try {
+			Connection connection = this.getConnection();
+			Statement statement = connection.createStatement();
+			ResultSet result = statement.executeQuery(sql);
+			connection.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 }
