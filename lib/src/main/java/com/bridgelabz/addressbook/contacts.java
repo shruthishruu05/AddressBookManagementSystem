@@ -3,21 +3,23 @@ package com.bridgelabz.addressbook;
 import java.util.List;
 
 public class contacts {
-	private int contactID;
+	public Address address = new Address();
+	private int contactId;
 	private String firstName;
 	private String lastName;
 	private String phoneNumber;
 	private String email;
-	private String added;
+	private String dateAdded;
 	
-	public contacts(int contactID, String firstName, String lastName, String phoneNumber, String email,String added) {
+	
+	public contacts(int contactID, String firstName, String lastName, String phoneNumber, String email,String dateRange) {
 		super();
-		this.contactID = contactID;
+		this.contactId = contactID;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.phoneNumber = phoneNumber;
 		this.email = email;
-		this.added = added;
+		this.dateAdded = dateAdded;
 	}
 	public contacts() {
 		
@@ -30,14 +32,15 @@ public class contacts {
 		this.email = email;
 	}
 	
-	public String getAdded() {
-		return added;
+	public String getdateAdded() 
+	{
+		return dateAdded;
 	}
-	public void setAdded(String added) {
-		this.added = added;
+	public void setdateAdded(String added) {
+		this.dateAdded = added;
 	}
-	public int getContactID() {
-		return contactID;
+	public int getContactId() {
+		return contactId;
 	}
 
 	public String getFirstName() {
@@ -56,8 +59,8 @@ public class contacts {
 		return email;
 	}
 
-	public void setContactID(int contactID) {
-		this.contactID = contactID;
+	public void setContactId(int contactId) {
+		this.contactId = contactId;
 	}
 
 	public void setFirstName(String firstName) {
@@ -75,4 +78,11 @@ public class contacts {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	public Address getAddress() {
+		return address;
+	}
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
 }
