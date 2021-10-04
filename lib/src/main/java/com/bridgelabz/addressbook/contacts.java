@@ -12,9 +12,10 @@ public class contacts {
 	private String dateAdded;
 	
 	
-	public contacts(int contactID, String firstName, String lastName, String phoneNumber, String email,String dateRange) {
+	public contacts(int contactId, String firstName, String lastName, String phoneNumber, String email,String dateRange) 
+	{
 		super();
-		this.contactId = contactID;
+		this.contactId = contactId;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.phoneNumber = phoneNumber;
