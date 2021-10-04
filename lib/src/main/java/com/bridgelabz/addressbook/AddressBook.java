@@ -60,6 +60,11 @@ public class AddressBook implements AddressBookIF
 			JsonServiceProvider jsonIO = new JsonServiceProvider();
 			jsonIO.writeData(person,JSON_FILE_NAME );
 		}
+		else if(type.equals(IOService.DB_IO)) {
+			AdressBookDBService addressBookDBService = new AdressBookDBService();
+			addressBookDBService.addNewContactToContacts(person);
+			List<contacts> addressBookList = addressBookDBService.readContactData();
+		}
 		
 	}
 	
@@ -344,6 +349,7 @@ public class AddressBook implements AddressBookIF
 			contactsList = addressDBService.getContactDetailsBasedOnStateUsingStatement(state);
 		return contactsList;
 	}
+	
 		
 }
 	
